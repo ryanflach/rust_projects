@@ -9,10 +9,8 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101); // inclusive on lower bound, exclusive on upper (why?)
 
-    println!("The secret number is: {}", secret_number);
-
     loop {
-        println!("Please input your guess.");
+        println!("Please input your guess (note: must be a number).");
 
         // variables are immutable by default. `mut` declares mutability.
         let mut guess = String::new(); // :: indicates an associated function (static method)
@@ -21,8 +19,10 @@ fn main() {
             .expect("Failed to read line");
 
         // `guess` here shadows the previous definition
-        let guess: u32 = guess.trim().parse()
-            .expect("Please type a number!");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue, // `_` is a catchall value
+        };
 
         println!("You guessed: {}", guess);
 
