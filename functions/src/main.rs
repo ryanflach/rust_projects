@@ -1,8 +1,10 @@
 fn main() {
-    another_function(5, 7);
+    let x = plus_one(5);
+
+    println!("The value of x is : {}", x);
 }
 
-fn another_function(x: i32, y: i32) {
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
+// `-> <type>` indicates that the function will return a value of type <type>
+fn plus_one(x: i32) -> i32 {
+    x + 1
 }
