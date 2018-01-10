@@ -1,14 +1,12 @@
 fn main() {
-    let number = 6;
+    let condition = true;
 
-    // Must be a boolean; truthy or falsy are not accepted.
-    if number % 4 == 0 {
-        println!("number is divisible by 4");
-    } else if number % 3 == 0 {
-        println!("number is divisible by 3");
-    } else if number % 2 == 0 {
-        println!("number is divisible by 2");
+    // types in the conditional must be the same when using for variable assignment
+    let number = if condition {
+        5
     } else {
-        println!("number is not divisible by 4, 3, or 2");
-    }
+        6
+    };
+
+    println!("The value of number is: {}", number);
 }
