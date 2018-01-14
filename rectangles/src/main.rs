@@ -4,17 +4,19 @@ struct Rectangle {
     height: u32,
 }
 
+impl Rectangle {
+    // Still need to use & to borrow - methods can take ownership of `self`,
+    // borrow `self` immutably (as done here), or borrow `self` mutably.
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
-    // {:?} tells println! to use an output format called Debug.
-    println!("rect 1 is {:?}", rect1);
-    // "rect 1 is Rectangle { width: 30, height: 50 }"
-
-    // Using {:#?} provides more readable formatting - usefull for larger structs
-    println!("rect 1 is {:#?}", rect1);
-    // "rect 1 is Rectangle {
-    //      width: 30,
-    //      height: 50
-    //  }"
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        rect1.area()
+    );
 }
