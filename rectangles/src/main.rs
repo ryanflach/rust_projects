@@ -1,3 +1,4 @@
+#[derive(Debug)] // must explicitly opt-in for Debug output formatting
 struct Rectangle {
     width: u32,
     height: u32,
@@ -6,14 +7,14 @@ struct Rectangle {
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
 
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        // borrow via reference (&) so main retains ownership and can
-        // continue using rect1
-        area(&rect1)
-    );
-}
+    // {:?} tells println! to use an output format called Debug.
+    println!("rect 1 is {:?}", rect1);
+    // "rect 1 is Rectangle { width: 30, height: 50 }"
 
-fn area(rectangle: &Rectangle) -> u32 {
-    rectangle.width * rectangle.height
+    // Using {:#?} provides more readable formatting - usefull for larger structs
+    println!("rect 1 is {:#?}", rect1);
+    // "rect 1 is Rectangle {
+    //      width: 30,
+    //      height: 50
+    //  }"
 }
