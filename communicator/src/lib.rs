@@ -1,6 +1,6 @@
-mod client;
+pub mod client; // All code in Rust is private by default
 
-mod network;
+pub mod network;
 
 #[cfg(test)]
 mod tests {
