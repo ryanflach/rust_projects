@@ -4,8 +4,11 @@ pub mod network;
 
 #[cfg(test)]
 mod tests {
+    // use brings the specified into scope
+    use super::client; // super goes up one level, :: (i.e. ::client) would start from the root
+
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        client::connect();
     }
 }
