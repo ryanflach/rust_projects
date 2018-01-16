@@ -1,0 +1,6 @@
+[package]
+name = "communicator"
+version = "0.1.0"
+authors = ["Ryan Flach <ryanflach@users.noreply.github.com>"]
+
+[dependencies]
