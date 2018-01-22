@@ -1,31 +1,56 @@
-struct Point<T, U> {
-    x: T,
-    y: U,
+pub trait Summarizable {
+    // Can have multiple methods, one per line and ending with a semicolon.
+    fn summary(&self) -> String;
 }
 
-// Take two Point instances with up to 4 different total types and return a new
-// Point instance that is of types P1.x, P2.y.
-impl<T, U> Point<T, U> {
-    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
-        Point {
-            x: self.x,
-            y: other.y,
-        }
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summarizable for NewsArticle {
+    fn summary(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&self) -> String {
+        format!("{}: {}", self.username, self.content)
     }
 }
 
 fn main() {
-    let p1 = Point { x: 5, y: 10.4 };
-    let p2 = Point { x: "Hello", y: 'c'};
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    };
 
-    let p3 = p1.mixup(p2);
-
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+    println!("1 new tweet: {}", tweet.summary());
 }
 
-// Note on performance with generics:
-// There is no runtime difference in performance when using generics vs concrete
-// types, thanks to Rust's use of monomorphization (turning generic code into
-// specific code at compile time). "We can write the non-duplicated code using
-// generics, and Rust will compile that into code that specifies the type in
-// each instance."
+// "One restriction to note with trait implementations: we may implement a trait
+// on a type as long as either the trait or the type are local to our crate. In
+// other words, we aren’t allowed to implement external traits on external types.
+// We can’t implement the Display trait on Vec, for example, since both Display
+// and Vec are defined in the standard library. We are allowed to implement
+// standard library traits like Display on a custom type like Tweet as part of
+// our aggregator crate functionality. We could also implement Summarizable on
+// Vec in our aggregator crate, since we’ve defined Summarizable there. This
+// restriction is part of what’s called the orphan rule, which you can look up
+// if you’re interested in type theory. Briefly, it’s called the orphan rule
+// because the parent type is not present. Without this rule, two crates could
+// implement the same trait for the same type, and the two implementations would
+// conflict: Rust wouldn’t know which implementation to use. Because Rust enforces
+// the orphan rule, other people’s code can’t break your code and vice versa."
