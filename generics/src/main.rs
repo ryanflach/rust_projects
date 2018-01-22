@@ -1,27 +1,17 @@
-fn largest<T>(list: &[T]) -> T {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
+// Can have as many mixed types as needed (though many is discouraged)
+struct Point<T, U> {
+    x: T,
+    y: U,
 }
 
 fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-   assert_eq!(result, 100);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest(&char_list);
-    println!("The largest char is {}", result);
-   assert_eq!(result, 'y');
+    let _integer = Point { x: 5, y: 10 };
+    let _float = Point { x: 1.0, y: 4.0 };
+    let _mixed = Point { x: 1.0, y: 10 };
 }
 
-// NOTE: This will not compile. Will return to this later.
+// Above is very similar to how generics are used with enums
+// enum Result<T, E> {
+//     Ok(T),
+//     Err(E),
+// }
