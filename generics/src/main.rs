@@ -1,6 +1,7 @@
 pub trait Summarizable {
-    // Can have multiple methods, one per line and ending with a semicolon.
-    fn summary(&self) -> String;
+    fn summary(&self) -> String {
+        String::from("(Read more...)")
+    }
 }
 
 pub struct NewsArticle {
@@ -23,11 +24,7 @@ pub struct Tweet {
     pub retweet: bool,
 }
 
-impl Summarizable for Tweet {
-    fn summary(&self) -> String {
-        format!("{}: {}", self.username, self.content)
-    }
-}
+impl Summarizable for Tweet {}
 
 fn main() {
     let tweet = Tweet {
@@ -38,6 +35,16 @@ fn main() {
     };
 
     println!("1 new tweet: {}", tweet.summary());
+
+    let article = NewsArticle {
+        headline: String::from("Penguins win the Stanley Cup Championship!"),
+        location: String::from("Pittsburgh, PA, USA"),
+        author: String::from("Iceburgh"),
+        content: String::from("The Pittsburgh Penguins once again are the best
+        hockey team in the NHL."),
+    };
+
+    println!("New article available! {}", article.summary());
 }
 
 // "One restriction to note with trait implementations: we may implement a trait
