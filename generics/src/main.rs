@@ -1,17 +1,22 @@
-// Can have as many mixed types as needed (though many is discouraged)
-struct Point<T, U> {
+struct Point<T> {
     x: T,
-    y: U,
+    y: T,
+}
+
+// `<T>` after `impl` is required so Rust knows that these methods are available
+// on all instances, not just concrete types.
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+
+    fn y(&self) -> &T {
+        &self.y
+    }
 }
 
 fn main() {
-    let _integer = Point { x: 5, y: 10 };
-    let _float = Point { x: 1.0, y: 4.0 };
-    let _mixed = Point { x: 1.0, y: 10 };
-}
+    let p = Point { x: 5, y: 10 };
 
-// Above is very similar to how generics are used with enums
-// enum Result<T, E> {
-//     Ok(T),
-//     Err(E),
-// }
+    println!("p.x = {}, p.y = {}", p.x(), p.y());
+}
