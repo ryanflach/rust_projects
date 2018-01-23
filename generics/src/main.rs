@@ -1,63 +1,25 @@
-pub trait Summarizable {
-    fn summary(&self) -> String {
-        String::from("(Read more...)")
+use std::cmp::PartialOrd;
+
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list.iter() {
+        if item > largest {
+            largest = item;
+        }
     }
-}
 
-pub struct NewsArticle {
-    pub headline: String,
-    pub location: String,
-    pub author: String,
-    pub content: String,
+    largest
 }
-
-impl Summarizable for NewsArticle {
-    fn summary(&self) -> String {
-        format!("{}, by {} ({})", self.headline, self.author, self.location)
-    }
-}
-
-pub struct Tweet {
-    pub username: String,
-    pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
-}
-
-impl Summarizable for Tweet {}
 
 fn main() {
-    let tweet = Tweet {
-        username: String::from("horse_ebooks"),
-        content: String::from("of course, as you probably already know, people"),
-        reply: false,
-        retweet: false,
-    };
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    println!("1 new tweet: {}", tweet.summary());
+    let result = largest(&number_list);
+    println!("The largest number is {}", result);
 
-    let article = NewsArticle {
-        headline: String::from("Penguins win the Stanley Cup Championship!"),
-        location: String::from("Pittsburgh, PA, USA"),
-        author: String::from("Iceburgh"),
-        content: String::from("The Pittsburgh Penguins once again are the best
-        hockey team in the NHL."),
-    };
+    let char_list = vec!['y', 'm', 'a', 'q'];
 
-    println!("New article available! {}", article.summary());
+    let result = largest(&char_list);
+    println!("The largest char is {}", result);
 }
-
-// "One restriction to note with trait implementations: we may implement a trait
-// on a type as long as either the trait or the type are local to our crate. In
-// other words, we aren’t allowed to implement external traits on external types.
-// We can’t implement the Display trait on Vec, for example, since both Display
-// and Vec are defined in the standard library. We are allowed to implement
-// standard library traits like Display on a custom type like Tweet as part of
-// our aggregator crate functionality. We could also implement Summarizable on
-// Vec in our aggregator crate, since we’ve defined Summarizable there. This
-// restriction is part of what’s called the orphan rule, which you can look up
-// if you’re interested in type theory. Briefly, it’s called the orphan rule
-// because the parent type is not present. Without this rule, two crates could
-// implement the same trait for the same type, and the two implementations would
-// conflict: Rust wouldn’t know which implementation to use. Because Rust enforces
-// the orphan rule, other people’s code can’t break your code and vice versa."
