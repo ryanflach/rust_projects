@@ -1,5 +1,17 @@
-pub fn greeting(name: &str) -> String {
-    String::from("Hello!")
+pub struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess {
+            value
+        }
+    }
 }
 
 #[cfg(test)]
@@ -7,13 +19,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn greeting_contains_name() {
-        let result = greeting("Carol");
-        // `assert!`, `assert_eq!`, and `assert_ne!` all take an optional final
-        // argument of a format string as a custom failure message.
-        assert!(
-            result.contains("Carol"),
-            "Greeting did not contain name, value was `{}`", result
-        );
+    #[should_panic]
+    fn greater_than_100() {
+        Guess::new(200);
     }
 }
