@@ -52,3 +52,69 @@ To run ignored tests, use:
 ```
 $ cargo test -- --ignored
 ```
+
+# Test Organization
+## Unit Tests
+Convention is to put unit tests in the _src_ directory, in each file with the code that they're testing under a module named `tests`, annotating the module with `cfg(test)`.
+```rust
+#[cfg(test)]
+mod tests {
+  #[test]
+  fn it_works() {
+    assert_eq!(2 + 2, 4);
+  }
+}
+```
+`cfg` stands for _configuration_ and tells Rust that the follow item should only be included given a certain config option (`test`). This makes it so the test code is only compiled when using `cargo test`, including any helper functions that might be within the `tests` module.
+
+### Testing Private Functions
+Not required, but possible:
+```rust
+pub fn add_two(a: i32) -> i32 {
+    internal_adder(a, 2)
+}
+
+fn internal_adder(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn internal() {
+        assert_eq!(4, internal_adder(2, 2));
+    }
+}
+```
+
+## Integration Tests
+### The _tests_ Directory
+Integration tests must live in a top-level directory named _tests_. See code examples and in-line comments. Each integration test file in the tests directory will have its own section in the test output.
+
+Additionally, you can specify specific integration test files or functions to test. Using `integration_test.rs`:
+```
+$ cargo test --test integration_test it_adds_two
+```
+Would run only the `it_adds_two` test. Without that last argument all tests in the file would be run.
+
+### Submodules in Integration Tests
+Shared logic in integration tests needs to be in a `mod.rs` in a named subdirectory under _tests_. For example, if we had a module named _common_ that we wanted to use, it would be under _tests/common/mod.rs_
+```rust
+pub fn setup() {
+  // setup code specific to your library's tests would go here
+}
+```
+And could then be used in our `integration_test.rs` file with:
+```rust
+extern crate adder;
+
+mod common;
+
+#[test]
+fn it_adds_two() {
+    common::setup();
+    assert_eq!(4, adder::add_two(2));
+}
+```
