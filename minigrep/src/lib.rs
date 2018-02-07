@@ -32,9 +32,43 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     // `?` will return the error value from the current function for the caller to handle.
     f.read_to_string(&mut contents)?;
 
-    println!("With text:\n{}", contents);
+    for line in search(&config.query, &contents) {
+        println!("{}", line)
+    }
 
     // This is a means of showing that we're calling `run` for side effects only
     // and that it doesn't return a value that we need.
     Ok(())
+}
+
+// The data returned by this function will live as long as the data passed in to
+// the contents argument.
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() { // lines() returns an iterator
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.";
+        assert_eq!(
+            vec!["safe, fast, productive."],
+            search(query, contents)
+        );
+    }
 }
